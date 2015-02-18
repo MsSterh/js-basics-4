@@ -7,6 +7,23 @@ function Spy(target, method) {
   //
   // * count returns number of method calls
   // * args returns an array of arrays of arguments
+  var init_method = target[method];
+  var obj = {
+    count: 0,
+    args: []
+  };
+
+  target[method] = function() {
+    obj.count++;
+    var arg = [];
+    for(var i in arguments) {
+      arguments.hasOwnProperty(i) && arg.push(arguments[i]);
+    }
+    obj.args.push(arg);
+    return init_method.apply(this, arguments);
+  }
+
+  return obj
 }
 
 module.exports = Spy

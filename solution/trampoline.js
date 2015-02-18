@@ -29,6 +29,16 @@ function repeat(operation, num) {
   // Write a function that performs operation provided number of times.
   // Do not use any kind of loop operator in your implementation.
   // To prevent stack overflow you can use trampoline function.
+
+  function _repeat(num) {
+    if (num) {
+      operation();
+      return _repeat.bind(null, --num)
+    } else 
+      return undefined
+  }
+
+  return trampoline(_repeat.bind(null, num));
 }
 
 function isEven(number) {
@@ -43,6 +53,19 @@ function isEven(number) {
   // Define a recursive function isEven corresponding to this description. The function should accept a number parameter and return a Boolean.
   // Test it on 50 and 75. See how it behaves on -1. Why? Can you think of a way to fix this?
   // To prevent stack overflow you can use trampoline function.
+
+  function _isEven(num) {
+    switch (num) {
+      case 0:
+        return true
+      case 1:
+        return false
+      default:
+        return (num > 0) ? _isEven.bind(null, num - 2) : isEven.bind(null, num + 2)
+    }
+  }
+
+  return trampoline(_isEven.bind(null, number)); 
 }
 
 module.exports = {
